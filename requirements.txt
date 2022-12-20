@@ -7,3 +7,6 @@ Pillow
 drf_spectacular
 django-cors-headers
 pre-commit
+isort
+autoflake
+black
