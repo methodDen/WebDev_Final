@@ -22,7 +22,8 @@ repos:
         files: \.py$
       - id: black
         name: Black Python code formatting
+        exclude: ^templates/
         entry: bash -c 'black "$@";'
         language: python
-        types: [ python ]
+        types: [python]
         args: [ "--line-length=88" ]
