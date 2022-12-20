@@ -31,3 +31,4 @@ urlpatterns += [
         name="swagger-ui",
     ),
 ]
+# just for testing
