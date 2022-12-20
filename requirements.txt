@@ -1,0 +1,9 @@
+Django==3.2.12
+djangorestframework
+djangorestframework-jwt
+django-filter
+psycopg2-binary
+Pillow
+drf_spectacular
+django-cors-headers
+pre-commit
