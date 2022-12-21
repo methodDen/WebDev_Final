@@ -1,3 +1,6 @@
+#!/bin/sh
+
+
 if [ "$DATABASE" = "postgres" ]
 then
     echo "Waiting for postgres..."
@@ -9,7 +12,9 @@ then
     echo "PostgreSQL started"
 fi
 
+echo "Flush database"
 python manage.py flush --no-input
+echo "Apply migrations"
 python manage.py migrate
 
 exec "$@"
