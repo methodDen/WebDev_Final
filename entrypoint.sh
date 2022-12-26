@@ -12,8 +12,10 @@ then
     echo "PostgreSQL started"
 fi
 
-echo "Flush database"
-python manage.py flush --no-input
+#echo "Flush database"
+#python manage.py flush --no-input
+echo "Make migrations"
+python manage.py makemigrations
 echo "Apply migrations"
 python manage.py migrate
 
