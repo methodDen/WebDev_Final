@@ -1,6 +1,5 @@
 Django==3.2.12
-djangorestframework
-djangorestframework-jwt
+djangorestframework==3.12.4
 django-filter
 psycopg2-binary
 Pillow
@@ -10,3 +9,5 @@ pre-commit
 isort
 autoflake
 black
+djoser
+djangorestframework_simplejwt
