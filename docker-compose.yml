@@ -8,17 +8,17 @@ services:
     volumes:
       - ./:/usr/src/app
     ports:
-      - "8050:8000"
+      - "8060:8000"
     env_file:
       - ./.env.dev
   db:
     image: postgres:12.2
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - pg_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=jusan_user
-      - POSTGRES_PASSWORD=jusan_password
+      - POSTGRES_PASSWORD=qwerty
       - POSTGRES_DB=jusan_dev
 
 volumes:
-  postgres_data:
+  pg_data:

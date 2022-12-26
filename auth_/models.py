@@ -9,17 +9,6 @@ from django.utils.translation import ugettext_lazy as _
 class MainUserManager(BaseUserManager):
     use_in_migrations = True
 
-    def get_all_users(self):
-        return self.select_related("profile")
-
-    def get_user_with_blogs(self):
-        return self.prefetch_related("blogs").filter(is_superuser=False, is_staff=False)
-
-    def get_user_data_for_home_page(self):
-        return self.get_all_users().only(
-            "id", "first_name", "last_name", "photo", "profile__brief_description"
-        )
-
     def _create_user(self, email, password, **extra_fields):
         """
         Creates and saves a User with the given email and password.
@@ -48,12 +37,8 @@ class MainUserManager(BaseUserManager):
 
 class MainUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
-    first_name = models.CharField(_("first name"), max_length=30, blank=True)
-    last_name = models.CharField(_("last name"), max_length=30, blank=True)
-    date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
     is_active = models.BooleanField(_("active"), default=True)
     is_staff = models.BooleanField(_("is_staff"), default=False)
-    photo = models.URLField(max_length=150, verbose_name="Фото")
 
     objects = MainUserManager()
 
@@ -69,11 +54,15 @@ class MainUser(AbstractBaseUser, PermissionsMixin):
 
 
 class Profile(models.Model):
-    brief_description = models.TextField(max_length=500, blank=True)
-    bio = models.TextField(max_length=1000, blank=True)
+    first_name = models.CharField(_("first name"), max_length=30, blank=True)
+    last_name = models.CharField(_("last name"), max_length=30, blank=True)
+    photo = models.URLField(max_length=150, verbose_name="Фото")
+    description = models.TextField(max_length=500, blank=True)
     location = models.CharField(
         max_length=200, blank=True, null=True, verbose_name="Местоположение"
     )
+    date_joined = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
     birth_date = models.DateField(null=True, blank=True)
     user = models.OneToOneField(
         MainUser, on_delete=models.CASCADE, related_name="profile"

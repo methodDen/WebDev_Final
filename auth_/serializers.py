@@ -1,48 +1,38 @@
 from rest_framework import serializers
-from auth_.models import MainUser, Profile
+
+from .models import MainUser, Profile
 
 
-class MainUserShortSerializer(serializers.ModelSerializer):
+class UserProfileDetailedSerializer(serializers.ModelSerializer):
+    class ProfileNestedSerializer(serializers.Serializer):
+        first_name = serializers.CharField(max_length=30, required=False)
+        last_name = serializers.CharField(max_length=30, required=False)
+        photo = serializers.URLField(max_length=150, required=False)
+        description = serializers.CharField(max_length=500, required=False)
+        location = serializers.CharField(max_length=200, required=False)
+        birth_date = serializers.DateField(required=False)
+
+    id = serializers.IntegerField()
+    email = serializers.EmailField()
+    profile = ProfileNestedSerializer()
+
     class Meta:
         model = MainUser
-        fields = ('first_name', 'last_name',)
+        fields = (
+            "id",
+            "email",
+            "profile",
+        )
 
 
-class MainUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MainUser
-        fields = ('id', 'email', 'first_name', 'last_name', 'date_joined', 'is_staff', 'photo')
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    hobbies = serializers.ListField(child=serializers.CharField())
-    skills = serializers.ListField(child=serializers.CharField())
-
+class ProfileRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('bio', 'location', 'birth_date', 'hobbies', 'skills', 'place_of_study', 'course')
-
-
-# class ProfileFullSerializer(serializers.ModelSerializer):
-#     class Meta(ProfileSerializer.Meta):
-#         fields = ProfileSerializer.Meta.fields +
-
-
-class MainUserWithProfileSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
-
-    class Meta:
-        model = MainUser
-        fields = ('id', 'email', 'first_name', 'last_name', 'date_joined', 'photo', 'profile')
-
-
-class ProfileBriefDescriptionSerializer(serializers.Serializer):
-    brief_description = serializers.CharField()
-
-
-class MainUserBriefSerializer(serializers.ModelSerializer):
-    profile = ProfileBriefDescriptionSerializer()
-
-    class Meta:
-        model = MainUser
-        fields = ('id', 'first_name', 'last_name', 'photo', 'profile')
+        fields = (
+            "first_name",
+            "last_name",
+            "photo",
+            "description",
+            "location",
+            "birth_date",
+        )
