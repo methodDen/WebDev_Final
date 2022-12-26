@@ -11,8 +11,6 @@ class MainUserAdmin(ModelAdmin):
     list_display = (
         "id",
         "email",
-        "first_name",
-        "last_name",
     )
     ordering = ("id",)
 

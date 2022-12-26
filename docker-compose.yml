@@ -18,7 +18,7 @@ services:
     environment:
       - POSTGRES_USER=jusan_user
       - POSTGRES_PASSWORD=qwerty
-      - POSTGRES_DB=jusan_database
+      - POSTGRES_DB=jusan_dev
 
 volumes:
   pg_data:
