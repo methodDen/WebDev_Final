@@ -1,5 +1,11 @@
-# from auth_.views.cbv import ProfileApiView
+from django.urls import path
+
+from .views import ProfileViewSet
 
 urlpatterns = [
-    # path('profiles/<int:pk>/', ProfileApiView.as_view())
+    path(
+        "profiles/me/",
+        ProfileViewSet.as_view({"get": "retrieve", "put": "update"}),
+        name="profile",
+    ),
 ]
