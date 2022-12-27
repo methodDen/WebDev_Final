@@ -1,7 +1,17 @@
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from .models import Category, Furniture, Item, ItemPhoto, Jewelry, Smartphone
+from auth_.models import MainUser
+
+from .models import (
+    Category,
+    Furniture,
+    Item,
+    ItemPhoto,
+    ItemReview,
+    Jewelry,
+    Smartphone,
+)
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
@@ -113,3 +123,36 @@ class ItemDetailSerializer(PolymorphicSerializer):
         Smartphone: SmartphoneSerializer,
         Furniture: FurnitureSerializer,
     }
+
+
+class ItemReviewSerializer(serializers.ModelSerializer):
+    class UserNestedSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = MainUser
+            fields = ("id", "email")
+
+    user = UserNestedSerializer()
+
+    class Meta:
+        model = ItemReview
+        fields = (
+            "id",
+            "user",
+            "amount",
+            "text",
+        )
+
+
+class ItemReviewCreateSerializer(serializers.ModelSerializer):
+    amount = serializers.IntegerField()
+    text = serializers.CharField(allow_null=True, allow_blank=True)
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = ItemReview
+        fields = (
+            "id",
+            "user",
+            "amount",
+            "text",
+        )
