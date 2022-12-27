@@ -4,11 +4,13 @@ from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Category, Item
+from .models import Category, Item, ItemReview
 from .serializers import (
     CategoryListSerializer,
     ItemDetailSerializer,
     ItemListSerializer,
+    ItemReviewCreateSerializer,
+    ItemReviewSerializer,
 )
 
 
@@ -77,4 +79,36 @@ class ItemViewSet(
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_queryset()
         serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
+class ReviewViewSet(
+    viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
+):
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        if self.action == "list":
+            item_id = self.kwargs[self.lookup_url_kwarg]
+            return (
+                ItemReview.objects.filter(item=item_id)
+                .select_related("user")
+                .only("user__email", "text", "amount")
+            )
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ItemReviewSerializer
+        if self.action == "create":
+            return ItemReviewCreateSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(item_id=self.kwargs[self.lookup_url_kwarg])
         return Response(serializer.data)
