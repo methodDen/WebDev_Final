@@ -20,3 +20,5 @@ RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 
 COPY . .
+
+ENV PYTHONPATH "${PYTHONPATH}:/usr/src/app"

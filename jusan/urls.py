@@ -22,6 +22,7 @@ urlpatterns = [
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
     path("api/accounts/", include("auth_.urls")),
+    path("api/shop/", include("shop.urls")),
 ]
 
 urlpatterns += [

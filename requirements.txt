@@ -11,3 +11,6 @@ autoflake
 black
 djoser
 djangorestframework_simplejwt
+django-rest-polymorphic
+django-polymorphic
+cyrtranslit
