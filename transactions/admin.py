@@ -10,6 +10,7 @@ class TransactionAdmin(ModelAdmin):
     list_display = (
         "id",
         "source_card",
+        "transaction_type",
     )
 
 
