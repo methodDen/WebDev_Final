@@ -10,18 +10,19 @@ urlpatterns = [
         ),
         name="credit-cards",
     ),
-    # path(
-    #     "credit-cards/my/",
-    #     CreditCardViewSet.as_view(
-    #         {"get": "list"},
-    #     ),
-    #     name="my-credit-cards",
-    # ),
-    # path(
-    #     "credit-cards/<int:credit_card_id>/",
-    #     CreditCardViewSet.as_view(
-    #         {"delete": "delete", "get": "retrieve", "patch": "select"},
-    #     ),
-    #     name="credit-card",
-    # ),
+    path(
+        "credit-cards/my/",
+        CreditCardViewSet.as_view(
+            {"get": "list"},
+        ),
+        name="my-credit-cards",
+    ),
+    path(
+        "credit-cards/my/<int:credit_card_id>/",
+        CreditCardViewSet.as_view(
+            {"get": "retrieve", "patch": "select"},
+            lookup_url_kwarg="credit_card_id",
+        ),
+        name="credit-card",
+    ),
 ]

@@ -24,9 +24,6 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     def get_serializer_class(self):
         return CategoryListSerializer
 
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
 
 class ItemViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin

@@ -56,7 +56,7 @@ class CreditCardCreateSerializer(serializers.ModelSerializer):
         return credit_card
 
 
-class CreditCardResponseSerializer(serializers.ModelSerializer):
+class CreditCardDetailedResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditCard
         fields = (
@@ -70,3 +70,26 @@ class CreditCardResponseSerializer(serializers.ModelSerializer):
             "currency",
             "is_main",
         )
+
+
+class CreditCardShortResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditCard
+        fields = (
+            "id",
+            "card_number",
+            "balance",
+            "bonuses",
+            "currency",
+            "is_main",
+        )
+
+
+class CreditCardSelectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditCard
+        fields = ("is_main",)
+
+    def update(self, instance, validated_data):
+        CreditCard.objects.filter(user=instance.user).update(is_main=False)
+        return super().update(instance, validated_data)

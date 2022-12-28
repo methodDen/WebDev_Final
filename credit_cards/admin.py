@@ -10,4 +10,5 @@ class CreditCardAdmin(ModelAdmin):
     list_display = (
         "id",
         "card_number",
+        "is_main",
     )
