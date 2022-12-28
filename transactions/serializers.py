@@ -35,6 +35,10 @@ class TransactionTransferSerializer(serializers.ModelSerializer):
         source_card = CreditCard.objects.filter(
             user=user, card_number=source_card_number
         ).first()
+
+        if not source_card:
+            raise serializers.ValidationError("Source card not found")
+
         destination_card = CreditCard.objects.filter(
             card_number=destination_card_number
         ).first()
