@@ -10,6 +10,7 @@ class UserProfileDetailedSerializer(serializers.ModelSerializer):
         photo = serializers.URLField(max_length=150, required=False)
         description = serializers.CharField(max_length=500, required=False)
         location = serializers.CharField(max_length=200, required=False)
+        phone = serializers.CharField(max_length=20, required=False)
         birth_date = serializers.DateField(required=False)
 
     id = serializers.IntegerField()
@@ -35,4 +36,5 @@ class ProfileRequestSerializer(serializers.ModelSerializer):
             "description",
             "location",
             "birth_date",
+            "phone",
         )
