@@ -68,7 +68,7 @@ class ItemViewSet(
                 "category",
                 OpenApiTypes.INT,
                 description="Search by category",
-                required=True,
+                required=False,
             )
         ]
         + filter_query_params
