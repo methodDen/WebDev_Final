@@ -11,6 +11,7 @@ class Transaction(TimestampMixin):
     TRANSFER = "TRANSFER"
     TRANSFER_TO_OTHER_BANK = "TRANSFER_TO_OTHER_BANK"
     PAYOUT = "PAYOUT"
+    COMMISSION = 150
 
     TRANSACTION_TYPES = (
         (TRANSFER, TRANSFER),

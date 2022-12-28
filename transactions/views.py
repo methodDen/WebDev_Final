@@ -3,7 +3,11 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .serializers import TransactionPayDetailSerializer, TransactionPaySerializer
+from .serializers import (
+    TransactionPayDetailSerializer,
+    TransactionPaySerializer,
+    TransactionTransferSerializer,
+)
 
 
 # Create your views here.
@@ -16,13 +20,15 @@ class TransactionViewSet(viewsets.GenericViewSet):
     def get_serializer_class(self):
         if self.action == "pay":
             return TransactionPaySerializer
+        if self.action == "transfer":
+            return TransactionTransferSerializer
 
     @action(methods=("POST",), detail=False)
     def transfer(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        instance = serializer.save()
+        return Response(TransactionPayDetailSerializer(instance).data)
 
     @action(methods=("POST",), detail=False)
     def pay(self, request, *args, **kwargs):

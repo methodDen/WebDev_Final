@@ -3,13 +3,13 @@ from django.urls import path
 from transactions.views import TransactionViewSet
 
 urlpatterns = [
-    # path(
-    #     "transfer/",
-    #     TransactionViewSet.as_view(
-    #         {"post": "transfer"},
-    #     ),
-    #     name="transfer",
-    # ),
+    path(
+        "transfer/",
+        TransactionViewSet.as_view(
+            {"post": "transfer"},
+        ),
+        name="transfer",
+    ),
     path(
         "pay/",
         TransactionViewSet.as_view(
