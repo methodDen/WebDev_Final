@@ -49,6 +49,10 @@ class ItemViewSet(
             item_id = self.kwargs[self.lookup_url_kwarg]
             return Item.objects.prefetch_related("photos").filter(id=item_id).first()
 
+    def get_permissions(self):
+        if self.action == "list":
+            return (AllowAny,)
+
     def get_serializer_class(self):
         if self.action == "list":
             return ItemListSerializer
