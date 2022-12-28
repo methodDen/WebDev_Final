@@ -16,7 +16,7 @@ from .serializers import (
 
 # Create your views here.
 class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
-    permission_classes = (IsAuthenticated, AllowAny)
+    permission_classes = (AllowAny,)
 
     def get_queryset(self):
         return Category.objects.all()
@@ -28,7 +28,7 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
 class ItemViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin
 ):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     filter_query_params = [
         OpenApiParameter(
@@ -83,6 +83,13 @@ class ReviewViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
 ):
     permission_classes = (IsAuthenticated,)
+
+    def get_permissions(self):
+        if self.action == "list":
+            self.permission_classes = (AllowAny,)
+        if self.action == "create":
+            self.permission_classes = (IsAuthenticated,)
+        return super().get_permissions()
 
     def get_queryset(self):
         if self.action == "list":

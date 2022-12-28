@@ -21,6 +21,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "photo",
+            "slug",
         )
 
 

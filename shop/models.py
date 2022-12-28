@@ -8,6 +8,7 @@ from mixins.models import IsActiveMixin, TimestampMixin
 class Category(TimestampMixin, IsActiveMixin):
     name = models.CharField(max_length=50, verbose_name="Название")
     photo = models.URLField(verbose_name="Фото", null=True, blank=True)
+    slug = models.SlugField(max_length=50, verbose_name="Слаг", unique=True)
 
     def __str__(self):
         return f"Category {self.name}"
