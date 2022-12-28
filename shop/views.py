@@ -1,6 +1,7 @@
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import mixins, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
@@ -15,7 +16,7 @@ from .serializers import (
 
 
 # Create your views here.
-class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+class CategoryViewSet(viewsets.GenericViewSet):
     permission_classes = (AllowAny,)
 
     def get_queryset(self):
@@ -23,6 +24,12 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
 
     def get_serializer_class(self):
         return CategoryListSerializer
+
+    @action(methods=("GET"), detail=False)
+    def list_categories(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class ItemViewSet(
