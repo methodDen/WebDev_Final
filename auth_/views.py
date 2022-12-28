@@ -27,6 +27,7 @@ class ProfileViewSet(
                     "profile__description",
                     "profile__location",
                     "profile__birth_date",
+                    "profile__phone",
                 )
                 .first()
             )
