@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from auth_.models import MainUser
+from auth_.models import MainUser, Profile
 
 from .models import (
     Category,
@@ -42,16 +42,19 @@ class ItemListSerializer(serializers.ModelSerializer):
         return None
 
 
-class JewelrySerializer(serializers.ModelSerializer):
+class ItemBaseSerializer(serializers.ModelSerializer):
     class PhotoNestedSerializer(serializers.ModelSerializer):
         class Meta:
             model = ItemPhoto
-            fields = ("photo",)
+            fields = (
+                "id",
+                "photo",
+            )
 
     photos = PhotoNestedSerializer(many=True)
 
     class Meta:
-        model = Jewelry
+        model = Item
         fields = (
             "id",
             "name",
@@ -59,6 +62,13 @@ class JewelrySerializer(serializers.ModelSerializer):
             "price",
             "brand",
             "photos",
+        )
+
+
+class JewelrySerializer(ItemBaseSerializer):
+    class Meta:
+        model = Jewelry
+        fields = ItemBaseSerializer.Meta.fields + (
             "weight",
             "height",
             "width",
@@ -67,23 +77,10 @@ class JewelrySerializer(serializers.ModelSerializer):
         )
 
 
-class SmartphoneSerializer(serializers.ModelSerializer):
-    class PhotoNestedSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = ItemPhoto
-            fields = ("photo",)
-
-    photos = PhotoNestedSerializer(many=True)
-
+class SmartphoneSerializer(ItemBaseSerializer):
     class Meta:
         model = Smartphone
-        fields = (
-            "id",
-            "name",
-            "description",
-            "price",
-            "brand",
-            "photos",
+        fields = ItemBaseSerializer.Meta.fields + (
             "os",
             "diagonal_size",
             "ram",
@@ -93,23 +90,10 @@ class SmartphoneSerializer(serializers.ModelSerializer):
         )
 
 
-class FurnitureSerializer(serializers.ModelSerializer):
-    class PhotoNestedSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = ItemPhoto
-            fields = ("photo",)
-
-    photos = PhotoNestedSerializer(many=True)
-
+class FurnitureSerializer(ItemBaseSerializer):
     class Meta:
         model = Furniture
-        fields = (
-            "id",
-            "name",
-            "description",
-            "price",
-            "brand",
-            "photos",
+        fields = ItemBaseSerializer.Meta.fields + (
             "material",
             "color",
             "note",
@@ -125,13 +109,24 @@ class ItemDetailSerializer(PolymorphicSerializer):
     }
 
 
-class ItemReviewSerializer(serializers.ModelSerializer):
-    class UserNestedSerializer(serializers.ModelSerializer):
+class ReviewUserNestedSerializer(serializers.ModelSerializer):
+    class ProfileNestedSerializer(serializers.ModelSerializer):
         class Meta:
-            model = MainUser
-            fields = ("id", "email")
+            model = Profile
+            fields = (
+                "first_name",
+                "last_name",
+            )
 
-    user = UserNestedSerializer()
+    profile = ProfileNestedSerializer()
+
+    class Meta:
+        model = MainUser
+        fields = ("id", "profile")
+
+
+class ItemReviewSerializer(serializers.ModelSerializer):
+    user = ReviewUserNestedSerializer()
 
     class Meta:
         model = ItemReview
