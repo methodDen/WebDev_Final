@@ -11,13 +11,11 @@ class Transaction(TimestampMixin):
     TRANSFER = "TRANSFER"
     TRANSFER_TO_OTHER_BANK = "TRANSFER_TO_OTHER_BANK"
     PAYOUT = "PAYOUT"
-    PURCHASE = "PURCHASE"
 
     TRANSACTION_TYPES = (
         (TRANSFER, TRANSFER),
         (TRANSFER_TO_OTHER_BANK, TRANSFER_TO_OTHER_BANK),
         (PAYOUT, PAYOUT),
-        (PURCHASE, PURCHASE),
     )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
