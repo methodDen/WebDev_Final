@@ -50,7 +50,7 @@ class ItemViewSet(
             return queryset
         if self.action == "retrieve":
             item_id = self.kwargs[self.lookup_url_kwarg]
-            return Item.objects.filter(id=item_id).first()
+            return Item.objects.prefetch_related("photos").filter(id=item_id).first()
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -93,7 +93,13 @@ class ReviewViewSet(
             return (
                 ItemReview.objects.filter(item=item_id)
                 .select_related("user")
-                .only("user__email", "text", "amount")
+                .select_related("user__profile")
+                .only(
+                    "user__profile__first_name",
+                    "user__profile__last_name",
+                    "text",
+                    "amount",
+                )
             )
 
     def get_serializer_class(self):
