@@ -6,7 +6,7 @@ urlpatterns = [
     path(
         "catalog/",
         CategoryViewSet.as_view(
-            {"get": "list"},
+            {"get": "list_categories"},
         ),
         name="categories",
     ),

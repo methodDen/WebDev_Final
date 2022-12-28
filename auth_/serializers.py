@@ -7,7 +7,7 @@ class UserProfileDetailedSerializer(serializers.ModelSerializer):
     class ProfileNestedSerializer(serializers.Serializer):
         first_name = serializers.CharField(max_length=30, required=False)
         last_name = serializers.CharField(max_length=30, required=False)
-        photo = serializers.URLField(max_length=150, required=False)
+        avatar = serializers.URLField(max_length=150, required=False)
         description = serializers.CharField(max_length=500, required=False)
         location = serializers.CharField(max_length=200, required=False)
         phone = serializers.CharField(max_length=20, required=False)
@@ -32,7 +32,7 @@ class ProfileRequestSerializer(serializers.ModelSerializer):
         fields = (
             "first_name",
             "last_name",
-            "photo",
+            "avatar",
             "description",
             "location",
             "birth_date",

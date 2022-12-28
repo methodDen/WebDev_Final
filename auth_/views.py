@@ -23,7 +23,7 @@ class ProfileViewSet(
                     "profile__id",
                     "profile__first_name",
                     "profile__last_name",
-                    "profile__photo",
+                    "profile__avatar",
                     "profile__description",
                     "profile__location",
                     "profile__birth_date",

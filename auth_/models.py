@@ -56,7 +56,7 @@ class MainUser(AbstractBaseUser, PermissionsMixin):
 class Profile(models.Model):
     first_name = models.CharField(_("first name"), max_length=30, blank=True)
     last_name = models.CharField(_("last name"), max_length=30, blank=True)
-    photo = models.URLField(max_length=150, verbose_name="Фото")
+    avatar = models.URLField(max_length=150, verbose_name="Фото")
     description = models.TextField(max_length=500, blank=True)
     location = models.CharField(
         max_length=200, blank=True, null=True, verbose_name="Местоположение"
