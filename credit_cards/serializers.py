@@ -6,6 +6,8 @@ from credit_cards.selectors import get_credit_cards_count
 
 class CreditCardCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    card_number = serializers.CharField(min_length=16, max_length=16)
+    cvv = serializers.CharField(min_length=3, max_length=3)
 
     class Meta:
         model = CreditCard
@@ -18,11 +20,10 @@ class CreditCardCreateSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-
-        if len(attrs["card_number"]) != 16:
-            raise serializers.ValidationError("Card number must be 16 digits long")
-        if len(attrs["cvv"]) != 3:
-            raise serializers.ValidationError("CVV must be 3 digits long")
+        if not attrs["card_number"].isnumeric():
+            raise serializers.ValidationError("Card number should be digits only")
+        if not attrs["cvv"].isnumeric():
+            raise serializers.ValidationError("CVV should be digits only")
         return attrs
 
     def create(self, validated_data):

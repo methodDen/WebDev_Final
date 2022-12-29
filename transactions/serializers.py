@@ -9,8 +9,8 @@ from .models import Transaction
 
 class TransactionTransferSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    source_card = serializers.CharField()
-    destination_card = serializers.CharField()
+    source_card = serializers.CharField(min_length=16, max_length=16)
+    destination_card = serializers.CharField(min_length=16, max_length=16)
     amount = serializers.FloatField()
     metadata = serializers.JSONField(required=False, allow_null=True)
 
@@ -23,6 +23,17 @@ class TransactionTransferSerializer(serializers.ModelSerializer):
             "amount",
             "metadata",
         )
+
+    def validate(self, attrs):
+        if not attrs["source_card"].isnumeric():
+            raise serializers.ValidationError(
+                "Source card number should be digits only"
+            )
+        if not attrs["destination_card"].isnumeric():
+            raise serializers.ValidationError(
+                "Destination card number should be digits only"
+            )
+        return attrs
 
     def create(self, validated_data):
         user = validated_data.get("author")
