@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from auth_.models import MainUser, Profile
 from credit_cards.models import CreditCard
 from transactions.services import add_bonuses_to_card
 
@@ -95,17 +96,19 @@ class TransactionPaySerializer(serializers.ModelSerializer):
         return transaction_instance
 
 
-class TransactionPayDetailSerializer(serializers.ModelSerializer):
-    class TransactionCreditCardNestedSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = CreditCard
-            fields = (
-                "id",
-                "balance",
-                "bonuses",
-            )
+class TransactionPayCreditCardNestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditCard
+        fields = (
+            "id",
+            "card_number",
+            "balance",
+            "bonuses",
+        )
 
-    source_card = TransactionCreditCardNestedSerializer()
+
+class TransactionPayDetailSerializer(serializers.ModelSerializer):
+    source_card = TransactionPayCreditCardNestedSerializer()
 
     class Meta:
         model = Transaction
@@ -115,4 +118,83 @@ class TransactionPayDetailSerializer(serializers.ModelSerializer):
             "source_card",
             "amount",
             "transaction_type",
+        )
+
+
+class TransactionTransferCreditCardNestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditCard
+        fields = (
+            "id",
+            "card_number",
+        )
+
+
+class TransactionTransferDetailSerializer(serializers.ModelSerializer):
+    source_card = TransactionPayCreditCardNestedSerializer()
+
+    class Meta:
+        model = Transaction
+        fields = (
+            "id",
+            "author",
+            "source_card",
+            "amount",
+            "transaction_type",
+            "commission",
+        )
+
+
+class TransactionCreditCardNestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditCard
+        fields = ("card_number",)
+
+
+class TransactionListSerializer(serializers.ModelSerializer):
+    source_card = TransactionCreditCardNestedSerializer()
+    destination_card = TransactionCreditCardNestedSerializer()
+
+    class Meta:
+        model = Transaction
+        fields = (
+            "id",
+            "source_card",
+            "destination_card",
+            "amount",
+            "transaction_type",
+            "commission",
+        )
+
+
+class TransactionDetailSerializer(serializers.ModelSerializer):
+    class TransactionUserNestedSerializer(serializers.ModelSerializer):
+        class ProfileNestedSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = Profile
+                fields = (
+                    "first_name",
+                    "last_name",
+                )
+
+        profile = ProfileNestedSerializer()
+
+        class Meta:
+            model = MainUser
+            fields = ("id", "profile")
+
+    source_card = TransactionCreditCardNestedSerializer()
+    destination_card = TransactionCreditCardNestedSerializer()
+    author = TransactionUserNestedSerializer()
+
+    class Meta:
+        model = Transaction
+        fields = (
+            "id",
+            "author",
+            "source_card",
+            "destination_card",
+            "amount",
+            "transaction_type",
+            "commission",
         )
